@@ -11,8 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import viewpagerindicator.viewpagerindicator.R;
@@ -64,6 +66,7 @@ public class ViewPagerIndicator extends LinearLayout {
     private ViewPager mViewPger;
     private Context mContext;
     private int screenWidth;
+    private Scroller mScroller;
 
     public ViewPagerIndicator(Context context) {
         this(context, null);
@@ -95,6 +98,7 @@ public class ViewPagerIndicator extends LinearLayout {
         screenWidth = windowManager.getDefaultDisplay().getWidth();
 //        tabCount = mViewPger.getAdapter().getCount();
 //        Log.i(Tag, "tabCount: " + tabCount);
+        mScroller = new Scroller(mContext);
     }
 
     @Override
@@ -112,11 +116,11 @@ public class ViewPagerIndicator extends LinearLayout {
      */
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
         canvas.save();
         canvas.translate(defaultTranslationX + triangleTranslationX, getHeight());//位移画板
         canvas.drawPath(mPath, mPaint);
         canvas.restore();
+        super.dispatchDraw(canvas);
     }
 
     /**
@@ -133,11 +137,13 @@ public class ViewPagerIndicator extends LinearLayout {
     public void scoll(int position, float positionOffset) {
         triangleTranslationX = (int) ((tabWidth * positionOffset) + ((position) * tabWidth));
         Log.i(Tag, "positionOffset: " + positionOffset);
-        Log.i(Tag, "triangleTranslationX: " + triangleTranslationX);
+//        Log.i(Tag, "triangleTranslationX: " + triangleTranslationX);
         Log.i(Tag, "position: " + position);
         Log.i(Tag, "tabWidth * positionOffset: " + tabWidth * positionOffset);
-        if(position>visiableTabCount-2){
-            scrollTo((int) (tabWidth * positionOffset)+getWidth(),0);
+        if (position > visiableTabCount - 2 && positionOffset > 0) {
+            int toX = (int) (tabWidth * positionOffset) + (tabWidth * (position - (visiableTabCount - 1)));
+            scrollTo((int) (tabWidth * positionOffset) + (tabWidth * (position - (visiableTabCount - 1))), 0);
+            Log.i(Tag, "toX: " + toX);
         }
 
 
@@ -159,6 +165,40 @@ public class ViewPagerIndicator extends LinearLayout {
             tv.setGravity(Gravity.CENTER);
             tv.setLayoutParams(lp);
             addView(tv);
+            final int finalI = i;
+            tv.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    triangleTranslationX = tabWidth * finalI;
+                    mViewPger.setCurrentItem(finalI);
+                    postInvalidate();
+                }
+            });
         }
     }
+
+
+    /**
+     * 慢慢的移动到某一点
+     *
+     * @param destX
+     * @param destY
+     */
+    public void smoothScrollTo(int destX, int destY) {
+        int scrollX = getScrollX();
+        int scrollY = getScrollY();
+        int dx = destX - scrollX;
+        int dy = destY - scrollY;
+        mScroller.startScroll(scrollX, scrollY, dx, dy);
+        invalidate();
+    }
+
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+        }
+        postInvalidate();
+    }
+
 }
