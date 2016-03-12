@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="#112211"
-        hkj:visiable_tab_count="3"
+        hkj:visiable_tab_count="5"
         android:orientation="horizontal">
 
 

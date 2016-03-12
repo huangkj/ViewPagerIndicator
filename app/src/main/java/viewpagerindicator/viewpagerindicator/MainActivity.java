@@ -10,7 +10,7 @@ import viewpagerindicator.viewpagerindicator.ui.ViewPagerIndicator;
 
 public class MainActivity extends FragmentActivity {
 
-    private String[] mTitles = {"pager1", "pager2", "pager3", "pager4", "pager5"};
+    private String[] mTitles = {"pager1", "pager2", "pager3", "pager4", "pager5", "pager6", "pager7", "pager8", "pager9"};
     private ViewPager viewPager;
     private ViewPagerIndicator viewPagerIndicator;
 

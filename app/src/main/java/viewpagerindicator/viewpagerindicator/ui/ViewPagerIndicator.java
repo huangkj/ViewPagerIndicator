@@ -140,9 +140,10 @@ public class ViewPagerIndicator extends LinearLayout {
 //        Log.i(Tag, "triangleTranslationX: " + triangleTranslationX);
         Log.i(Tag, "position: " + position);
         Log.i(Tag, "tabWidth * positionOffset: " + tabWidth * positionOffset);
-        if (position > visiableTabCount - 2 && positionOffset > 0) {
+
+        if (position >= visiableTabCount / 2 - 0.5 && positionOffset > 0) {
             int toX = (int) (tabWidth * positionOffset) + (tabWidth * (position - (visiableTabCount - 1)));
-            scrollTo((int) (tabWidth * positionOffset) + (tabWidth * (position - (visiableTabCount - 1))), 0);
+            scrollTo((int) ((int) (tabWidth * positionOffset) + Math.max(0, (tabWidth * (position - Math.ceil(visiableTabCount / 2))))), 0);
             Log.i(Tag, "toX: " + toX);
         }
 
@@ -169,7 +170,6 @@ public class ViewPagerIndicator extends LinearLayout {
             tv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    triangleTranslationX = tabWidth * finalI;
                     mViewPger.setCurrentItem(finalI);
                     postInvalidate();
                 }
