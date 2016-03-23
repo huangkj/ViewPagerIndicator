@@ -10,7 +10,7 @@ import viewpagerindicator.viewpagerindicator.ui.ViewPagerIndicator;
 
 public class MainActivity extends FragmentActivity {
 
-    private String[] mTitles = {"pager1", "pager2", "pager3", "pager4", "pager5", "pager6", "pager7", "pager8", "pager9"};
+    private String[] mTitles = {"pager1", "pager2", "pager3", "pager4","pager5", "pager6", "pager7", "pager8"};
     private ViewPager viewPager;
     private ViewPagerIndicator viewPagerIndicator;
 
@@ -26,22 +26,7 @@ public class MainActivity extends FragmentActivity {
     private void initViews() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPagerIndicator = (ViewPagerIndicator) findViewById(R.id.vp_indicator);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                viewPagerIndicator.scoll(position, positionOffset);
-            }
 
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
     }
 
